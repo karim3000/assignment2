@@ -7,10 +7,14 @@ int button1 = 22; //Pin of Button 1
 int task3pin = 14;
 ///task 4 variables
 int task4pin = 13;
-unsigned int ANLGinput;
+int ANLGinput = 0;
 ///Task 5 variables
 unsigned int task5avg;
 int readcounter = 0;
+int oldANLG = 0;
+///Task 6 variables
+int task6counter = 0;
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(led1, OUTPUT); //Defines the directionality of the led 1 pin to output
@@ -38,12 +42,19 @@ void task3(){
   
 }
 void task4(){
+  readcounter++;
+  oldANLG = ANLGinput;
   ANLGinput = digitalRead(task4pin);
-  Serial.println(ANLGinput);
-  if (counter >= 4){
-    
-  }
-  task5avg = task5avg +}
+  Serial.println(ANLGinput);}
+
 void task5(){
-  
+  if (readcounter <= 4){
+    task5avg = task5avg + ANLGinput;}
+  else {
+    task5avg = task5avg + ANLGinput - oldANLG;}
+}
+void task6(){
+  while (task6counter <= 1000){
+    __asm__ __volatile__ ("nop");
+  }
 }
