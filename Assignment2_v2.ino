@@ -3,9 +3,10 @@ int pulse1 = 0.05 * 1000;  //Represents the duration of the Signal 1 pulse
 int led1 = 21;
 ///Task 2 variables
 int button1 = 22; //Pin of Button 1
-unsigned int buttonState
+unsigned int buttonState;
 ///Task 3 variables
 int task3pin = 14;
+unsigned int frequency;
 ///task 4 variables
 int task4pin = 13;
 int ANLGinput = 0;
@@ -23,6 +24,7 @@ int led2 = 15;
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(9600);
   pinMode(led1, OUTPUT); //Defines the directionality of the led 1 pin to output
   pinMode(led2, OUTPUT); //Defines the directionality of the led 2 pin to output
   pinMode(button1, INPUT); //Defines the directionality of the button 1 pin to input
@@ -42,7 +44,7 @@ void task1(){
   delayMicroseconds(pulse1);            //with duration of 50uS to LED 2 representing signal B
   digitalWrite(led1, LOW);}
 void task2(){
-  buttonState = Serial.read(button1);}
+  buttonState = digitalRead(button1);}
 void task3(){
   
 }
@@ -73,5 +75,4 @@ void task8(){
   digitalWrite(led2, error);
 }
 void task9(){
-  
-}
+  Serial.println(buttonState && ", " && frequency && ", " && compAvg);}
