@@ -1,6 +1,6 @@
+///Task 1 variables
 int led1 = 21;
-int led2 = 15;
-
+///Task 2 variables
 int button1 = 22; //Pin of Button 1
 
 int task3pin = 13;
@@ -25,9 +25,11 @@ void loop() {
 void task1(){
   digitalWrite(led2, HIGH); //This line coupled with the 2 below will run a signal 
   delayMicroseconds(pulse1);            //with duration of 50uS to LED 2 representing signal B
-  digitalWrite(led2, LOW); 
-}
-
+  digitalWrite(led2, LOW);}
 void task2(){
-  Serial.write(button2);
+  Serial.write(button1);}
+void task3(){
+  
 }
+void task4(){
+  
