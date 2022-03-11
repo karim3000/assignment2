@@ -45,15 +45,16 @@ void setup() {
   pinMode(button1, INPUT); //Defines the directionality of the button 1 pin to input
   pinMode(task3pin, INPUT);
   pinMode(task4pin, INPUT);
-  
 }
 
 void task1(){ //Turn LED on and off for duration of "pulse1"
   digitalWrite(led1, HIGH); //This line coupled with the 2 below will run a signal 
   delayMicroseconds(pulse1);
   digitalWrite(led1, LOW);}
+  
 void task2(){ //Store button state
   buttonState = digitalRead(button1);}
+  
 void task3(){ //Check task 3 pin then calculate the time it takes to change state
   measure1 = digitalRead(task3pin);
   time1 = millis();
@@ -61,18 +62,21 @@ void task3(){ //Check task 3 pin then calculate the time it takes to change stat
   }
   time2 = millis();
   frequency = 1 / (time2 - time1);}
+  
 void task4(){ //Read and store an analog input from task4pin
   readcounter++;
-  oldANLG[readcounter] = ANLGinput;
-  ANLGinput = analogRead(task4pin);}
+  if (readcounter>=5){
+    readcounter = 1;
+  }
+  ANLGinput = analogRead(task4pin);
+  oldANLG[readcounter] = ANLGinput;}
+  
+  
 void task5(){ //Calculate average of the last 4 analog inputs
-  if (readcounter <= 4){
-    task5avg = task5avg + ANLGinput;
-    oldANLG[readcounter] = ANLGinput;}
-  else {
-    task5avg = oldANLG[readcounter] + oldANLG[readcounter - 1] + oldANLG[readcounter - 2] + oldANLG[readcounter - 3];
-    compAvg = task5avg / 4;}}
-void task6(){ /
+  task5avg = oldANLG[1] + oldANLG[2] + oldANLG[3] + oldANLG[4];
+  compAvg = task5avg / 4;}
+    
+void task6(){ 
   while (task6counter <= 100){
     __asm__ __volatile__ ("nop");
     task6counter++;}}
@@ -81,9 +85,10 @@ void task7(){ //Check error state
     error = 1;}
   else{
     error = 0;}}
+    
 void task8(){ //LED 2 reflects error state (on = error)
-  digitalWrite(led2, error);
-}
+  digitalWrite(led2, error);}
+  
 void task9(){
   ///Prints data in the format of: "buttonState, frequency, average"
   Serial.print(buttonState);
@@ -92,14 +97,15 @@ void task9(){
   Serial.print(", " );
   Serial.println(compAvg);
   }
-  
+
+
 void loop() {
 // put your main code here, to run repeatedly:
  timeRN = millis();
  if (timeRN > 5000){  //This creates a counter that resets every 5000 ticks
   counter++; //Increment counter
-  timeRN = timeRN - (counter*5000); //Cycles between 0-5000
- }
+  timeRN = timeRN - (counter*5000);} //Cycles between 0-5000
+ 
  if ((timeRN % 9)== 0){ //Task 1 every 9ms
   task1();}
  if (timeRN % 200){  //Task 2 every 200ms
