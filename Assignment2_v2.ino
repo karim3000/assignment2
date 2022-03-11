@@ -7,7 +7,7 @@ unsigned int buttonState;
 unsigned int timeRN;
 ///Task 3 variables
 int task3pin = 16;   ///orange wire (analog input
-unsigned int frequency;
+int frequency = 0;
 ///task 4 variables
 int task4pin = 13;
 int ANLGinput = 0;
@@ -33,31 +33,10 @@ void setup() {
   pinMode(task4pin, INPUT);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-   timeRN = millis();
-   if ((timeRN % 9) == 0){
-    task1();}
-   if ((timeRN % 200) == 0){
-    task2();}
-   if ((timeRN % 1000) == 0){
-    task3();}
-   if ((timeRN % 42) == 0){
-    task4();
-    task5();}
-   if ((timeRN % 100) == 0){
-    task6();}  
-   if ((timeRN % 333) == 0){
-    task7();
-    task8();} 
-   if ((timeRN % 5000) == 0){
-    task9();}
-}
 void task1(){
   digitalWrite(led1, HIGH); //This line coupled with the 2 below will run a signal 
-  delayMicroseconds(pulse1*1000);            //with duration of 50uS to LED 2 representing signal B
-  digitalWrite(led1, LOW);
-  ///delay(1000);}
+  delayMicroseconds(pulse1);            //with duration of 50uS to LED 2 representing signal B
+  digitalWrite(led1, LOW);}
 void task2(){
   buttonState = digitalRead(button1);}
 void task3(){
@@ -72,8 +51,8 @@ void task5(){
   if (readcounter <= 4){
     task5avg = task5avg + ANLGinput;}
   else {
-    task5avg = task5avg + ANLGinput - oldANLG;}
-    compAvg = task5avg / 4;
+    task5avg = task5avg + ANLGinput - oldANLG;
+    compAvg = task5avg / 4;}
 }
 void task6(){
   while (task6counter <= 1000){
@@ -90,4 +69,28 @@ void task8(){
   digitalWrite(led2, error);
 }
 void task9(){
-  Serial.println(buttonState && ", " && frequency && ", " && compAvg);}
+  Serial.print(buttonState);
+  Serial.print(", " );///+ frequency + ", " + compAvg);
+  Serial.println(compAvg);
+  }
+  
+void loop() {
+// put your main code here, to run repeatedly:
+ timeRN = millis();
+ if ((timeRN % 9) == 0){
+  task1();}
+ if ((timeRN % 200) == 0){
+  task2();}
+ if ((timeRN % 1000) == 0){
+  task3();}
+ if ((timeRN % 42) == 0){
+  task4();
+  task5();}
+ if ((timeRN % 100) == 0){
+  task6();}  
+ if ((timeRN % 333) == 0){
+  task7();
+  task8();} 
+ if (((timeRN % 5000)*1000) == 0){
+  task9();}
+}
