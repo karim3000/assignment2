@@ -11,7 +11,6 @@
 ///Task 1 variables
 int pulse1 = 0.05 * 1000;  //Represents the duration of the Signal 1 pulse
 int led1 = 21; //LED pin
-unsigned int prevtime;  //Used to track the beginning of the LED flash
 ///Task 2 variables
 int button1 = 22; //Pin of Button 1
 unsigned int buttonState; 
@@ -29,7 +28,7 @@ int ANLGinput = 0;
 ///Task 5 variables
 unsigned int task5avg;
 int readcounter = 0;
-int oldANLG = 0;
+int oldANLG[] = {};
 int compAvg = 0;
 ///Task 6 variables
 int task6counter = 0;
@@ -49,71 +48,72 @@ void setup() {
   
 }
 
-void task1(){
-  prevtime = millis(); 
+void task1(){ //Turn LED on and off for duration of "pulse1"
   digitalWrite(led1, HIGH); //This line coupled with the 2 below will run a signal 
   delayMicroseconds(pulse1);
   digitalWrite(led1, LOW);}
-void task2(){
+void task2(){ //Store button state
   buttonState = digitalRead(button1);}
-void task3(){
+void task3(){ //Check task 3 pin then calculate the time it takes to change state
   measure1 = digitalRead(task3pin);
   time1 = millis();
   while (digitalRead(task3pin) == frequency){
   }
   time2 = millis();
   frequency = 1 / (time2 - time1);}
-void task4(){
+void task4(){ //Read and store an analog input from task4pin
   readcounter++;
-  oldANLG = ANLGinput;
-  ANLGinput = digitalRead(task4pin);}
-void task5(){
+  oldANLG[readcounter] = ANLGinput;
+  ANLGinput = analogRead(task4pin);}
+void task5(){ //Calculate average of the last 4 analog inputs
   if (readcounter <= 4){
-    task5avg = task5avg + ANLGinput;}
+    task5avg = task5avg + ANLGinput;
+    oldANLG[readcounter] = ANLGinput;}
   else {
-    task5avg = task5avg + ANLGinput - oldANLG;
+    task5avg = oldANLG[readcounter] + oldANLG[readcounter - 1] + oldANLG[readcounter - 2] + oldANLG[readcounter - 3];
     compAvg = task5avg / 4;}}
-void task6(){
+void task6(){ /
   while (task6counter <= 100){
     __asm__ __volatile__ ("nop");
     task6counter++;}}
-void task7(){
-  if (compAvg > (0.5 * 256)){
+void task7(){ //Check error state 
+  if (compAvg > (0.5 * 1023)){
     error = 1;}
-else{
+  else{
     error = 0;}}
-void task8(){
+void task8(){ //LED 2 reflects error state (on = error)
   digitalWrite(led2, error);
 }
 void task9(){
+  ///Prints data in the format of: "buttonState, frequency, average"
   Serial.print(buttonState);
   Serial.print(", " );
-  Serial.println(frequency);
+  Serial.print(frequency);
   Serial.print(", " );
-  Serial.print(compAvg);
+  Serial.println(compAvg);
   }
   
 void loop() {
 // put your main code here, to run repeatedly:
  timeRN = millis();
  if (timeRN > 5000){  //This creates a counter that resets every 5000 ticks
-  counter++;
-  timeRN = timeRN - (counter*5000);
+  counter++; //Increment counter
+  timeRN = timeRN - (counter*5000); //Cycles between 0-5000
  }
- if ((timeRN % 9)== 0){
+ if ((timeRN % 9)== 0){ //Task 1 every 9ms
   task1();}
- if (timeRN % 1000){
+ if (timeRN % 200){  //Task 2 every 200ms
   task2();}
- if ((timeRN % 1000) == 0){
+ if ((timeRN % 1000) == 0){ //Task 3 every 1000ms
   task3();}
- if ((timeRN % 42) == 0){
+ if ((timeRN % 42) == 0){ //Task 4 then 5 every 42 ms
   task4();
   task5();}
- if ((timeRN % 100) == 0){
+ if ((timeRN % 100) == 0){  //Task 6 every 100ms
   task6();}  
- if ((timeRN % 333) == 0){
+ if ((timeRN % 333) == 0){  //Task  then 8 every 333ms
   task7();
   task8();} 
- if (timeRN / 5000 == 1.00){
+ if (timeRN / 5000 == 1.00){  //Task 9 every 5000ms
   task9();}
 }
