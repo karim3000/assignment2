@@ -4,8 +4,9 @@ int led1 = 21;
 ///Task 2 variables
 int button1 = 22; //Pin of Button 1
 unsigned int buttonState;
+unsigned int timeRN;
 ///Task 3 variables
-int task3pin = 14;
+int task3pin = 16;   ///orange wire (analog input
 unsigned int frequency;
 ///task 4 variables
 int task4pin = 13;
@@ -30,19 +31,33 @@ void setup() {
   pinMode(button1, INPUT); //Defines the directionality of the button 1 pin to input
   pinMode(task3pin, INPUT);
   pinMode(task4pin, INPUT);
- 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-   task1();
-   
+   timeRN = millis();
+   if ((timeRN % 9) == 0){
+    task1();}
+   if ((timeRN % 200) == 0){
+    task2();}
+   if ((timeRN % 1000) == 0){
+    task3();}
+   if ((timeRN % 42) == 0){
+    task4();
+    task5();}
+   if ((timeRN % 100) == 0){
+    task6();}  
+   if ((timeRN % 333) == 0){
+    task7();
+    task8();} 
+   if ((timeRN % 5000) == 0){
+    task9();}
 }
-
 void task1(){
   digitalWrite(led1, HIGH); //This line coupled with the 2 below will run a signal 
-  delayMicroseconds(pulse1);            //with duration of 50uS to LED 2 representing signal B
-  digitalWrite(led1, LOW);}
+  delayMicroseconds(pulse1*1000);            //with duration of 50uS to LED 2 representing signal B
+  digitalWrite(led1, LOW);
+  ///delay(1000);}
 void task2(){
   buttonState = digitalRead(button1);}
 void task3(){
